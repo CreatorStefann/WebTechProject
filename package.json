@@ -1,0 +1,15 @@
+{
+  "name": "webtechproject",
+  "version": "1.0.0",
+  "description": "1. Project Plan",
+  "main": "/backend/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
