@@ -1,38 +1,83 @@
 # WebTechProject
-1. Project Plan
 
-Objective:
-Develop a conference management web application that allows organizers, reviewers, and authors to manage conferences, paper submissions, reviews, and feedback.
+## 1. Project Overview
 
-USER ROLES:
+### Objective
+Develop a **conference management web application** that allows organizers, reviewers, and authors to manage conferences, paper submissions, reviews, and feedback.
 
-Organizer:
-    - Create conferences.
-    - Assign reviewers to conferences.
-    - Monitor paper statuses (submitted, under review, accepted, rejected).
-Reviewer:
-    - Review assigned papers.
-    - Provide feedback or approve/reject papers.
-Author:
-    - Submit papers for conferences.
-    - Upload updated papers based on feedback from reviewers.
-Core Features:
-    - Conference Creation: Organizers can create conferences with titles, start/end dates, and descriptions.
-    - Paper Submission: Authors can submit papers with a title, abstract, and PDF file for a conference.
-    - Reviewer Assignment: Upon paper submission, two reviewers are automatically assigned to each paper.
-    - Review Management: Reviewers can provide feedback or approve/reject papers.
-    - Feedback Loop: Authors can revise and re-upload papers based on reviewer feedback.
-    - Status Monitoring: Organizers can view the status of submitted papers (pending, under review, feedback given, accepted, rejected).
+### User Roles
 
-2. Detailed Specifications
+- **Organizer**:  
+  - Create conferences.
+  - Assign reviewers to conferences.
+  - Monitor paper statuses (submitted, under review, accepted, rejected).
 
-API Endpoints:
+- **Reviewer**:  
+  - Review assigned papers.
+  - Provide feedback or approve/reject papers.
 
-POST /api/conferences:  Create a new conference (accessible by organizers).
-GET /api/conferences:   List all conferences (accessible by organizers).
-POST /api/users:    Register a new user (author/reviewer/organizer).
-POST /api/papers:   Submit a paper for a specific conference (accessible by authors).
-GET /api/papers:    List all papers submitted to a conference (accessible by organizers).
-GET /api/papers/{id}:   Get details of a specific paper by ID (accessible by organizers and reviewers).
-POST /api/reviews:  Submit a review for a paper (accessible by reviewers).
-PATCH /api/papers/:   Update a paper after receiving feedback (accessible by authors).
+- **Author**:  
+  - Submit papers for conferences.
+  - Upload updated papers based on feedback from reviewers.
+
+### Core Features
+
+- **Conference Creation**:  
+  Organizers can create conferences with titles, start/end dates, and descriptions.
+
+- **Paper Submission**:  
+  Authors can submit papers with a title, abstract, and PDF file for a specific conference.
+
+- **Reviewer Assignment**:  
+  Two reviewers are automatically assigned to each paper upon submission.
+
+- **Review Management**:  
+  Reviewers can provide feedback or approve/reject papers.
+
+- **Feedback Loop**:  
+  Authors can revise and re-upload papers based on reviewer feedback.
+
+- **Status Monitoring**:  
+  Organizers can track the status of submitted papers (pending, under review, feedback given, accepted, rejected).
+
+---
+
+## 2. API Specifications
+
+### Endpoints
+
+#### **Conferences**
+- **Create Conference**  
+  `POST /api/conferences`  
+  _Create a new conference (organizer access)._
+
+- **List Conferences**  
+  `GET /api/conferences`  
+  _Get a list of all conferences (organizer access)._
+
+#### **Users**
+- **Register User**  
+  `POST /api/users`  
+  _Register a new user (author/reviewer/organizer access)._
+
+#### **Papers**
+- **Submit Paper**  
+  `POST /api/papers`  
+  _Submit a paper to a specific conference (author access)._
+
+- **List Submitted Papers**  
+  `GET /api/papers`  
+  _Get a list of all papers submitted to a conference (organizer access)._
+
+- **Get Paper Details**  
+  `GET /api/papers/{id}`  
+  _Retrieve details of a specific paper by ID (organizer and reviewer access)._
+
+- **Update Paper (After Feedback)**  
+  `PATCH /api/papers/{id}`  
+  _Update a paper after receiving feedback (author access)._
+
+#### **Reviews**
+- **Submit Review**  
+  `POST /api/reviews`  
+  _Submit a review for an assigned paper (reviewer access)._
