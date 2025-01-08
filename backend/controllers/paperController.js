@@ -2,6 +2,7 @@ const Paper = require('../models/paper');
 const Conference = require('../models/conference');
 const User = require('../models/user');
 const Review = require('../models/review');
+const {assignReviewersToPaper} = require('../controllers/conferenceController');
 
 const submitPaper = async (req, res) => {
   try {
@@ -24,6 +25,8 @@ const submitPaper = async (req, res) => {
       conferenceId,
       status: 'under review',
     });
+
+    await assignReviewersToPaper(paper.id);
 
     const reviewers = await User.findAll({ where: { role: 'reviewer' }, limit: 2 });
     res.status(201).json({
@@ -100,14 +103,14 @@ const updatePaper = async (req, res) => {
       return res.status(404).json({ error: 'Paper not found.' });
     }
 
-    if (paper.status !== 'feedback given') {
+    if (paper.status !== 'rejected') {
       return res.status(400).json({ error: 'Paper cannot be updated at this stage.' });
     }
 
     paper.title = title || paper.title;
     paper.abstract = abstract || paper.abstract;
     paper.fileUrl = fileUrl || paper.fileUrl;
-    paper.status = 'submitted';
+    paper.status = 'under review';
 
     await paper.save();
 
@@ -143,10 +146,50 @@ const deletePaper = async (req, res) => {
     }
 };
 
+const getAssignedReviewers = async (req, res) => {
+  try {
+    const paperId = parseInt(req.params.paperId);
+
+    const reviews = await Review.findAll({
+      where: { paperId },
+      include: [
+        {
+          model: User, 
+          as: 'reviewer',
+          attributes: ['id', 'username'],
+        },
+      ],
+    });
+
+    if (reviews.length === 0) {
+      return res.status(404).json({
+        message: `No reviewers assigned for paper ID ${paperId}`,
+      });
+    }
+
+    const assignedReviewers = reviews.map((review) => ({
+      reviewerId: review.reviewer.id,
+      name: review.reviewer.username,
+      status: review.status,
+    }));
+
+    res.status(200).json({
+      paperId,
+      reviewers: assignedReviewers,
+    });
+  } catch (error) {
+    console.error('Error fetching assigned reviewers:', error);
+    res.status(500).json({ error: 'An error occurred while fetching reviewers.' });
+  }
+};
+
+
+
 module.exports = {
   submitPaper,
   listSubmittedPapers,
   getPaperDetails,
   updatePaper,
   deletePaper,
+  getAssignedReviewers,
 };
