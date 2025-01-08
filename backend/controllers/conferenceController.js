@@ -1,10 +1,10 @@
 const Conference = require('../models/conference');
-const { User } = require('../config/db');
+const { User } = require('../config/db'); //pentru auth
 
 const createConference = async (req, res) => {
     try {
 
-      const role = 'organizer'; 
+      const role = 'organizer'; //de sters -> hardcodat
   
       if (role !== 'organizer') {
         return res.status(403).json({ error: 'Access denied. Only organizers can create conferences.' });

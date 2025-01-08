@@ -5,10 +5,12 @@ const Conference = require('./models/conference');
 const Paper = require('./models/paper');
 const Review = require('./models/review');
 const conferenceRoutes = require('./routes/conferences');
+const paperRoutes = require('./routes/papers');
 
 const app = express();
 app.use(express.json()); 
 app.use('/api/conferences', conferenceRoutes);
+app.use('/api/papers', paperRoutes);
 
 (async () => {
   await connectDB();

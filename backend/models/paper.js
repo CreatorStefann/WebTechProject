@@ -15,7 +15,7 @@ const Paper = sequelize.define('Paper', {
     allowNull: true, 
   },
   status: {
-    type: DataTypes.ENUM('submitted', 'under review', 'accepted', 'rejected'),
+    type: DataTypes.ENUM('submitted', 'under review', 'feedback given', 'accepted', 'rejected'),
     allowNull: false,
     defaultValue: 'submitted',
   },
