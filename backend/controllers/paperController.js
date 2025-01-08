@@ -98,15 +98,18 @@ const updatePaper = async (req, res) => {
     const { id } = req.params;
     const { title, abstract, fileUrl } = req.body;
 
+    // Find the paper by ID
     const paper = await Paper.findByPk(id);
     if (!paper) {
       return res.status(404).json({ error: 'Paper not found.' });
     }
 
+    // Ensure the paper is in 'rejected' status before allowing updates
     if (paper.status !== 'rejected') {
       return res.status(400).json({ error: 'Paper cannot be updated at this stage.' });
     }
 
+    // Update paper fields
     paper.title = title || paper.title;
     paper.abstract = abstract || paper.abstract;
     paper.fileUrl = fileUrl || paper.fileUrl;
@@ -114,8 +117,15 @@ const updatePaper = async (req, res) => {
 
     await paper.save();
 
+    // Update statuses of associated reviews to 'pending'
+    const reviews = await Review.findAll({ where: { paperId: id } });
+    for (const review of reviews) {
+      review.status = 'pending';
+      await review.save();
+    }
+
     res.status(200).json({
-      message: 'Paper updated successfully!',
+      message: 'Paper updated successfully, and reviews set to pending.',
       paper,
     });
   } catch (error) {
@@ -123,6 +133,7 @@ const updatePaper = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while updating the paper.' });
   }
 };
+
 
 const deletePaper = async (req, res) => {
     try {
