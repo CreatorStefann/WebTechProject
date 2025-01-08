@@ -14,6 +14,10 @@ const Review = sequelize.define('Review', {
       max: 5,
     },
   },
+  status: {
+    type: DataTypes.ENUM('accepted', 'rejected'),
+    allowNull: false,
+  }
 });
 
 module.exports = Review;

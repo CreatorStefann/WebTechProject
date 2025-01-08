@@ -22,23 +22,10 @@ const submitPaper = async (req, res) => {
       abstract,
       fileUrl,
       conferenceId,
-      status: 'feedback given',
+      status: 'under review',
     });
 
     const reviewers = await User.findAll({ where: { role: 'reviewer' }, limit: 2 });
-    // if (reviewers.length < 2) {
-    //   return res.status(500).json({ error: 'Not enough reviewers available.' });
-    // }
-
-    await Promise.all(
-      reviewers.map((reviewer) =>
-        Review.create({
-          paperId: paper.id,
-          reviewerId: reviewer.id,
-        })
-      )
-    );
-
     res.status(201).json({
       message: 'Paper submitted successfully!',
       paper,
