@@ -60,6 +60,7 @@ const updateReview = async (req, res) => {
   try {
     const { paperId, feedback, rating, status, reviewerId } = req.body;
 
+    // Validate input
     if (!paperId || !status || !['accepted', 'rejected'].includes(status)) {
       return res.status(400).json({ error: 'PaperId, status (accepted/rejected), and feedback are required.' });
     }
@@ -68,15 +69,18 @@ const updateReview = async (req, res) => {
       return res.status(400).json({ error: 'Rating must be between 1 and 5.' });
     }
 
+    // Check if the paper exists
     const paper = await Paper.findByPk(paperId);
     if (!paper) {
       return res.status(404).json({ error: 'Paper not found.' });
     }
 
+    // Ensure the paper is under review
     if (paper.status !== 'under review') {
       return res.status(400).json({ error: 'Paper is not under review.' });
     }
 
+    // Check if the reviewer is assigned to this paper
     const existingReview = await Review.findOne({
       where: { paperId, reviewerId },
     });
@@ -85,18 +89,24 @@ const updateReview = async (req, res) => {
       return res.status(403).json({ error: 'You are not assigned to review this paper.' });
     }
 
+    // Prevent updating a review that is already completed
     if (existingReview.status !== 'pending') {
       return res.status(400).json({ error: 'You have already submitted a review for this paper.' });
     }
 
+    // Update the review with feedback, rating, and status
     existingReview.feedback = feedback;
     existingReview.rating = rating;
     existingReview.status = status;
     await existingReview.save();
 
-    const reviews = await Review.findAll({ where: { paperId, status: 'pending' } });
-    if (reviews.length === 0) {
-      const hasRejected = reviews.some((r) => r.status === 'rejected');
+    // Check all reviews for this paper
+    const allReviews = await Review.findAll({ where: { paperId } });
+    const pendingReviews = allReviews.filter((r) => r.status === 'pending');
+    const hasRejected = allReviews.some((r) => r.status === 'rejected');
+
+    // Update paper status only when all reviews are completed
+    if (pendingReviews.length === 0) {
       paper.status = hasRejected ? 'rejected' : 'accepted';
       await paper.save();
     }
@@ -110,6 +120,8 @@ const updateReview = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while updating the review.' });
   }
 };
+
+
 
 module.exports = {
   submitReview,
