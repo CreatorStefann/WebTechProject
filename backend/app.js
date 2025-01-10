@@ -7,7 +7,8 @@ const Review = require('./models/review');
 const conferenceRoutes = require('./routes/conferences');
 const paperRoutes = require('./routes/papers');
 const reviewRoutes=require('./routes/reviews');
-const userRoutes=require('./routes/users')
+const userRoutes=require('./routes/users');
+const authRoutes=require('./routes/authRoutes');
 
 const app = express();
 app.use(express.json()); 
@@ -15,6 +16,7 @@ app.use('/api/conferences', conferenceRoutes);
 app.use('/api/papers', paperRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users',userRoutes);
+app.use('/api/authRoutes', authRoutes);
 
 (async () => {
   await connectDB();
