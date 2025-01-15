@@ -1,5 +1,8 @@
 const Review = require('../models/review');
 const Paper = require('../models/paper');
+//modificat
+const Conference = require('../models/conference');
+//adaugat Conference model pentru get assigned papers
 const User = require('../models/user');
 
 const submitReview = async (req, res) => {
@@ -23,22 +26,19 @@ const submitReview = async (req, res) => {
       return res.status(400).json({ error: 'Paper is not under review.' });
     }
 
-    // Check if the reviewer is assigned to this paper
     const existingReview = await Review.findOne({
-      where: { paperId, reviewerId}, // Assuming `req.user.id` is populated
+      where: { paperId, reviewerId},
     });
 
     if (!existingReview) {
       return res.status(403).json({ error: 'You are not assigned to review this paper.' });
     }
 
-    // Update the review with feedback, rating, and status
     existingReview.feedback = feedback;
     existingReview.rating = rating;
     existingReview.status = status;
     await existingReview.save();
 
-    // Check if both reviews are submitted and update paper status
     const reviews = await Review.findAll({ where: { paperId } });
     if (reviews.length >= 2) {
       const hasRejected = reviews.some((r) => r.status && r.status.includes('rejected'));
@@ -60,7 +60,6 @@ const updateReview = async (req, res) => {
   try {
     const { paperId, feedback, rating, status, reviewerId } = req.body;
 
-    // Validate input
     if (!paperId || !status || !['accepted', 'rejected'].includes(status)) {
       return res.status(400).json({ error: 'PaperId, status (accepted/rejected), and feedback are required.' });
     }
@@ -69,18 +68,15 @@ const updateReview = async (req, res) => {
       return res.status(400).json({ error: 'Rating must be between 1 and 5.' });
     }
 
-    // Check if the paper exists
     const paper = await Paper.findByPk(paperId);
     if (!paper) {
       return res.status(404).json({ error: 'Paper not found.' });
     }
 
-    // Ensure the paper is under review
     if (paper.status !== 'under review') {
       return res.status(400).json({ error: 'Paper is not under review.' });
     }
 
-    // Check if the reviewer is assigned to this paper
     const existingReview = await Review.findOne({
       where: { paperId, reviewerId },
     });
@@ -89,23 +85,19 @@ const updateReview = async (req, res) => {
       return res.status(403).json({ error: 'You are not assigned to review this paper.' });
     }
 
-    // Prevent updating a review that is already completed
     if (existingReview.status !== 'pending') {
       return res.status(400).json({ error: 'You have already submitted a review for this paper.' });
     }
 
-    // Update the review with feedback, rating, and status
     existingReview.feedback = feedback;
     existingReview.rating = rating;
     existingReview.status = status;
     await existingReview.save();
 
-    // Check all reviews for this paper
     const allReviews = await Review.findAll({ where: { paperId } });
     const pendingReviews = allReviews.filter((r) => r.status === 'pending');
     const hasRejected = allReviews.some((r) => r.status === 'rejected');
 
-    // Update paper status only when all reviews are completed
     if (pendingReviews.length === 0) {
       paper.status = hasRejected ? 'rejected' : 'accepted';
       await paper.save();
@@ -120,10 +112,58 @@ const updateReview = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while updating the review.' });
   }
 };
+//adaugat get assigned papers
+const getAssignedPapers = async (req, res) => {
+  try {
+    const { reviewerId } = req.params;
+
+    const reviews = await Review.findAll({
+      where: { reviewerId },
+      include: [
+        {
+          model: Paper,
+          attributes: ['id', 'title', 'abstract', 'fileUrl', 'status'],
+          include: [{ model: Conference, attributes: ['id', 'title', 'startDate', 'endDate'] }],
+        },
+      ],
+    });
+
+    if (!reviews || reviews.length === 0) {
+      return res.status(200).json({ papers: [] });
+    }
+
+    const papers = reviews.map((review) => ({
+      reviewId: review.id,
+      paperId: review.Paper.id,
+      title: review.Paper.title,
+      abstract: review.Paper.abstract,
+      fileUrl: review.Paper.fileUrl,
+      status: review.Paper.status,
+      feedback: review.feedback,
+      rating: review.rating,
+      conference: review.Paper.Conference
+        ? {
+            id: review.Paper.Conference.id,
+            title: review.Paper.Conference.title,
+            startDate: review.Paper.Conference.startDate,
+            endDate: review.Paper.Conference.endDate,
+          }
+        : null,
+    }));
+
+    res.status(200).json({ papers });
+  } catch (error) {
+    console.error('Error fetching assigned papers:', error);
+    res.status(500).json({ error: 'An error occurred while fetching assigned papers.' });
+  }
+};
+
+
 
 
 
 module.exports = {
   submitReview,
   updateReview,
+  getAssignedPapers,
 };
