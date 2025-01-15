@@ -17,22 +17,29 @@ const UploadPaper = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
+  
     if (!title || !fileUrl) {
       setError('Title and file link are required.');
       return;
     }
-
+  
     try {
+      const authorId = localStorage.getItem('userId');
+      if (!authorId) {
+        setError('User is not logged in. Please log in again.');
+        return;
+      }
+  
       const payload = {
         title,
         abstract,
         fileUrl,
         conferenceId,
+        authorId,
       };
-
+  
       await axios.post('http://localhost:3000/api/papers', payload);
-
+  
       setSuccess('Paper uploaded successfully!');
       setTimeout(() => navigate('/author-dashboard'), 2000);
     } catch (err) {

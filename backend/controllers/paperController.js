@@ -7,7 +7,9 @@ const {assignReviewersToPaper} = require('../controllers/conferenceController');
 const submitPaper = async (req, res) => {
   try {
     // JWT AUTH PENTRU SEMNATURA -> USER = AUTOR ; ID_USER O SA FIE IN CLAIMS
-    const { title, abstract, fileUrl, conferenceId } = req.body;
+    const { title, abstract, fileUrl, conferenceId, authorId } = req.body;
+
+    //const authorId=localStorage.getItem('userId');
 
     if (!title || !conferenceId) {
       return res.status(400).json({ error: 'Title and conferenceId are required.' });
@@ -23,6 +25,7 @@ const submitPaper = async (req, res) => {
       abstract,
       fileUrl,
       conferenceId,
+      authorId,
       status: 'under review',
     });
 
@@ -92,6 +95,30 @@ const getPaperDetails = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching paper details.' });
   }
 };
+
+const fetchUploadedPapersByAuthorId = async (req, res) => {
+  try {
+    const { authorId } = req.params;
+    const papers = await Paper.findAll({
+      where: { authorId },
+      include: [{ model: Conference, attributes: ['title'] }],
+    });
+
+    const formattedPapers = papers.map((paper) => ({
+      id: paper.id,
+      title: paper.title,
+      abstract: paper.abstract,
+      fileUrl: paper.fileUrl,
+      conferenceTitle: paper.Conference?.title || 'N/A',
+      status: paper.status,
+    }));
+
+    res.status(200).json({ papers: formattedPapers });
+  } catch (error) {
+    console.error('Error fetching uploaded papers:', error);
+    res.status(500).json({ error: 'Failed to fetch uploaded papers.' });
+  }
+}
 
 const updatePaper = async (req, res) => {
   try {
@@ -199,4 +226,5 @@ module.exports = {
   updatePaper,
   deletePaper,
   getAssignedReviewers,
+  fetchUploadedPapersByAuthorId,
 };

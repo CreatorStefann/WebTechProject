@@ -5,7 +5,8 @@ const {
   getPaperDetails,
   updatePaper,
   deletePaper,
-  getAssignedReviewers
+  getAssignedReviewers,
+  fetchUploadedPapersByAuthorId,
 } = require('../controllers/paperController');
 const { authenticate } = require('../middleware/authMiddleware');
 const authorize = require('../middleware/authorize');
@@ -17,5 +18,6 @@ router.get('/:id',authenticate, authorize('organizer', 'reviewer'), getPaperDeta
 router.patch('/:id', authenticate, authorize('author'), updatePaper);    // PATCH /api/papers/:id
 router.delete('/:id', authenticate, authorize('organizer'), deletePaper);   // DELETE /api/papers/:id
 router.get('/:paperId/reviewers', authenticate, authorize('organizer'), getAssignedReviewers);
+router.get('/author/:authorId', authenticate, authorize('author'), fetchUploadedPapersByAuthorId);
 
 module.exports = router;
