@@ -9,8 +9,13 @@ import PaperList from './components/PaperList';
 import CreateConference from './components/CreateConference';
 import ReviewerDashboard from './components/ReviewerDashboard';
 import MainPage from './components/MainPage';
+import axios from 'axios';
 
 const App = () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
   return (
     <Router>
       <Routes>

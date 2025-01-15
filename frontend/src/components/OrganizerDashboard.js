@@ -10,12 +10,27 @@ const OrganizerDashboard = () => {
   useEffect(() => {
     const fetchConferences = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/conferences');
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setError('User is not authenticated. Please log in.');
+          return;
+        }
+   
+        const response = await axios.get('http://localhost:3000/api/conferences', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setConferences(response.data.conferences);
       } catch (err) {
-        setError('Failed to fetch conferences. Please try again.');
+        if (err.response && err.response.status === 401) {
+          setError('Unauthorized. Please log in again.');
+          navigate('/login');
+        } else {
+          setError('Failed to fetch conferences. Please try again.');
+        }
       }
-    };
+   };
 
     fetchConferences();
   }, []);
