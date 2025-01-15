@@ -9,6 +9,11 @@ const register = async (req, res) => {
     console.log('Register request body:', req.body);
     const { username, password, role } = req.body;
 
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username already exists. Please choose a different username.' });
+    }
+
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password are required' });
     }

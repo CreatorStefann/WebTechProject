@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import "../styles/uploadPaper.css";
+import Header from './Header.js';
 
 const UploadPaper = () => {
   const { conferenceId } = useParams();
@@ -40,44 +41,47 @@ const UploadPaper = () => {
   };
 
   return (
-    <div className="upload-container">
-      <h2 className="text-center">Upload Paper</h2>
-      {error && <div className="alert alert-danger text-center">{error}</div>}
-      {success && <div className="alert alert-success text-center">{success}</div>}
-      <form onSubmit={handleSubmit} className="upload-form">
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">Title</label>
-          <input
-            type="text"
-            id="title"
-            className="form-control"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="abstract" className="form-label">Abstract</label>
-          <textarea
-            id="abstract"
-            className="form-control"
-            value={abstract}
-            onChange={(e) => setAbstract(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="fileUrl" className="form-label">File Link</label>
-          <input
-            type="url"
-            id="fileUrl"
-            className="form-control"
-            value={fileUrl}
-            onChange={(e) => setFileUrl(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary w-100">Upload</button>
-      </form>
+    <div>
+      <Header/>
+      <div className="upload-container">
+        <h2 className="text-center">Upload Paper</h2>
+        {error && <div className="alert alert-danger text-center">{error}</div>}
+        {success && <div className="alert alert-success text-center">{success}</div>}
+        <form onSubmit={handleSubmit} className="upload-form">
+          <div className="mb-3">
+            <label htmlFor="title" className="form-label">Title</label>
+            <input
+              type="text"
+              id="title"
+              className="form-control"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="abstract" className="form-label">Abstract</label>
+            <textarea
+              id="abstract"
+              className="form-control"
+              value={abstract}
+              onChange={(e) => setAbstract(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="fileUrl" className="form-label">File Link</label>
+            <input
+              type="url"
+              id="fileUrl"
+              className="form-control"
+              value={fileUrl}
+              onChange={(e) => setFileUrl(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100">Upload</button>
+        </form>
+      </div>
     </div>
   );
 };

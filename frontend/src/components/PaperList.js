@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Header from './Header.js';
 
 const PaperList = () => {
   const { conferenceId } = useParams(); 
@@ -59,44 +60,47 @@ const PaperList = () => {
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Paper List from Conference: {state?.conferenceTitle || 'Unknown Conference'}</h2>
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th>Paper Title</th>
-            <th>Abstract</th>
-            <th>Paper Link</th>
-            <th>Status</th>
-            <th>Assigned Reviewers</th>
-          </tr>
-        </thead>
-        <tbody>
-          {papers.map((paper) => (
-            <tr key={paper.id}>
-              <td>{paper.title}</td>
-              <td>{paper.abstract}</td>
-              <td>
-                <a href={paper.fileUrl} target="_blank" rel="noopener noreferrer">
-                  View Paper
-                </a>
-              </td>
-              <td>{paper.status}</td>
-              <td>
-                {Array.isArray(paper.reviewers) && paper.reviewers.length > 0 ? (
-                  paper.reviewers.map((reviewer, index) => (
-                    <div key={index}>
-                      {reviewer.name || 'Unassigned'} - {reviewer.status}
-                    </div>
-                  ))
-                ) : (
-                  'No reviewers assigned'
-                )}
-              </td>
+    <div>
+      <Header/>
+      <div className="container mt-5">
+        <h2>Paper List from Conference: {state?.conferenceTitle || 'Unknown Conference'}</h2>
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th>Paper Title</th>
+              <th>Abstract</th>
+              <th>Paper Link</th>
+              <th>Status</th>
+              <th>Assigned Reviewers</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {papers.map((paper) => (
+              <tr key={paper.id}>
+                <td>{paper.title}</td>
+                <td>{paper.abstract}</td>
+                <td>
+                  <a href={paper.fileUrl} target="_blank" rel="noopener noreferrer">
+                    View Paper
+                  </a>
+                </td>
+                <td>{paper.status}</td>
+                <td>
+                  {Array.isArray(paper.reviewers) && paper.reviewers.length > 0 ? (
+                    paper.reviewers.map((reviewer, index) => (
+                      <div key={index}>
+                        {reviewer.name || 'Unassigned'} - {reviewer.status}
+                      </div>
+                    ))
+                  ) : (
+                    'No reviewers assigned'
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

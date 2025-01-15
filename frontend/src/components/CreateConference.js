@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header.js';
 
 const CreateConference = () => {
   const [title, setTitle] = useState('');
@@ -41,46 +42,49 @@ const CreateConference = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center">Conference Creation Form</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-      {success && <div className="alert alert-success">{success}</div>}
-      <form onSubmit={handleCreateConference}>
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">Conference Name</label>
-          <input
-            type="text"
-            id="title"
-            className="form-control"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="startDate" className="form-label">Start Date</label>
-          <input
-            type="date"
-            id="startDate"
-            className="form-control"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="endDate" className="form-label">End Date</label>
-          <input
-            type="date"
-            id="endDate"
-            className="form-control"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary w-100">Create Conference</button>
-      </form>
+    <div>
+      <Header/>
+      <div className="container mt-5">
+        <h2 className="text-center">Conference Creation Form</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
+        <form onSubmit={handleCreateConference}>
+          <div className="mb-3">
+            <label htmlFor="title" className="form-label">Conference Name</label>
+            <input
+              type="text"
+              id="title"
+              className="form-control"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="startDate" className="form-label">Start Date</label>
+            <input
+              type="date"
+              id="startDate"
+              className="form-control"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="endDate" className="form-label">End Date</label>
+            <input
+              type="date"
+              id="endDate"
+              className="form-control"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100">Create Conference</button>
+        </form>
+      </div>
     </div>
   );
 };
