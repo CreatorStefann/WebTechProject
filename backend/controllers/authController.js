@@ -6,6 +6,7 @@ const User = require('../models/user');
 
 const register = async (req, res) => {
   try {
+    console.log('Register request body:', req.body);
     const { username, password, role } = req.body;
 
     if (!username || !password) {
