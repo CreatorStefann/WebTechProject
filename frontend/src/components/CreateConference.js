@@ -26,6 +26,7 @@ const CreateConference = () => {
     }
 
     try {
+      
       await axios.post('http://localhost:3000/api/conferences', {
         title,
         startDate,
