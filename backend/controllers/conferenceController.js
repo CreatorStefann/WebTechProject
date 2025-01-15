@@ -7,11 +7,6 @@ const Review = require('../models/review');
 
 const createConference = async (req, res) => {
   try {
-    const role = 'organizer'; 
-    if (role !== 'organizer') {
-      return res.status(403).json({ error: 'Access denied. Only organizers can create conferences.' });
-    }
-
     const { title, startDate, endDate } = req.body;
 
     if (!title || !startDate || !endDate) {

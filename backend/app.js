@@ -16,7 +16,7 @@ app.use('/api/conferences', conferenceRoutes);
 app.use('/api/papers', paperRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users',userRoutes);
-app.use('/api/authRoutes', authRoutes);
+app.use('/api/auth', authRoutes);
 
 (async () => {
   await connectDB();
