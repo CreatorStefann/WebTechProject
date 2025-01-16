@@ -17,7 +17,7 @@ const app = express();
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? 'https://final-project-webtech.azurewebsites.net/' 
-    : 'http://localhost:3000',
+    : 'http://localhost:3001',
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the conference app!');
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Server running on port ${port}`));
 
 module.exports = app;
