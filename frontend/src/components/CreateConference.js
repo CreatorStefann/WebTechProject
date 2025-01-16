@@ -28,7 +28,7 @@ const CreateConference = () => {
 
     try {
       
-      await axios.post('https://final-project-webtech.azurewebsites.net:8080/api/conferences', {
+      await axios.post('https://final-project-webtech.azurewebsites.net/api/conferences', {
         title,
         startDate,
         endDate,

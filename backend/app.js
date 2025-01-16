@@ -16,7 +16,7 @@ const app = express();
 
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://final-project-webtech.azurewebsites.net:8080' 
+    ? 'https://final-project-webtech.azurewebsites.net' 
     : 'http://localhost:8080',
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -38,10 +38,10 @@ app.use('/api/authRoutes', authRoutes);
 })();
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  app.use(express.static(path.join(__dirname, '../wwwroot/build')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../wwwroot/build', 'index.html'));
   });
 }
 

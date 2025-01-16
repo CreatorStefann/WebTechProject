@@ -22,7 +22,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post(`https://final-project-webtech.azurewebsites.net:8080/api/authRoutes/register`, {
+      const response = await axios.post(`https://final-project-webtech.azurewebsites.net/api/authRoutes/register`, {
         username,
         password,
         role,

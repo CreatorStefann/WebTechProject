@@ -14,7 +14,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('https://final-project-webtech.azurewebsites.net:8080/api/authRoutes/login', {
+      const response = await axios.post('https://final-project-webtech.azurewebsites.net/api/authRoutes/login', {
         username,
         password,
       });

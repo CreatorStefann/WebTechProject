@@ -11,7 +11,7 @@ const AuthorDashboard = () => {
   useEffect(() => {
     const fetchConferences = async () => {
       try {
-        const response = await axios.get('https://final-project-webtech.azurewebsites.net:8080/api/conferences');
+        const response = await axios.get('https://final-project-webtech.azurewebsites.net/api/conferences');
         setConferences(response.data.conferences);
       } catch (err) {
         setError('Failed to fetch conferences. Please try again later.');
@@ -28,7 +28,7 @@ const AuthorDashboard = () => {
   const handleShowUploadedPapers = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const response = await axios.get(`https://final-project-webtech.azurewebsites.net:8080/api/papers/author/${userId}`);
+      const response = await axios.get(`https://final-project-webtech.azurewebsites.net/api/papers/author/${userId}`);
 
       setUploadedPapers(response.data.papers);
       setShowPapers(true);
