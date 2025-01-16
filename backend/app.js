@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { connectDB, sequelize } = require('./config/db');
 const User = require('./models/user');
 const Conference = require('./models/conference');
@@ -14,14 +15,17 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3001',
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://final-project-webtech.azurewebsites.net/' 
+    : 'http://localhost:3000',
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
 
-app.use(express.json()); 
+app.use(express.json());
+
 app.use('/api/conferences', conferenceRoutes);
 app.use('/api/papers', paperRoutes);
 app.use('/api/reviews', reviewRoutes);
@@ -33,8 +37,19 @@ app.use('/api/authRoutes', authRoutes);
   await sequelize.sync({ alter: true });
 })();
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
+
 app.get('/', (req, res) => {
   res.send('Welcome to the conference app!');
 });
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
 
 module.exports = app;
