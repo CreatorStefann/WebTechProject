@@ -34,7 +34,7 @@ const OrganizerDashboard = () => {
    };
 
     fetchConferences();
-  }, []);
+  }, [navigate]);
 
   const handleGetPapers = (conferenceId, conferenceTitle) => {
     navigate(`/organizer/conferences/${conferenceId}/papers`, { state: { conferenceTitle } });
