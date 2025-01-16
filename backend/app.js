@@ -41,15 +41,12 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'frontend/build')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
   });
 }
 
 app.get('/', (req, res) => {
   res.send('Welcome to the conference app!');
 });
-
-const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Server running on port ${port}`));
 
 module.exports = app;
