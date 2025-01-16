@@ -19,7 +19,7 @@ const ReviewerDashboard = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/api/reviews/assigned-papers/${reviewerId}`
+          `https://final-project-webtech.azurewebsites.net:8080/api/reviews/assigned-papers/${reviewerId}`
         );
         setAssignedPapers(response.data.papers);
         setLoading(false);
@@ -47,7 +47,7 @@ const ReviewerDashboard = () => {
   
       console.log('Submitting review payload:', payload);
       
-      await axios.patch(`http://localhost:3000/api/reviews/${reviewerId}`, payload);
+      await axios.patch(`https://final-project-webtech.azurewebsites.net:8080/api/reviews/${reviewerId}`, payload);
   
       setSuccess(`Review for paper ${paperId} submitted successfully!`);
     } catch (err) {

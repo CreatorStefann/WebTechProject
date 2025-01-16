@@ -38,7 +38,7 @@ const UploadPaper = () => {
         authorId,
       };
   
-      await axios.post('http://localhost:3000/api/papers', payload);
+      await axios.post('https://final-project-webtech.azurewebsites.net:8080/api/papers', payload);
   
       setSuccess('Paper uploaded successfully!');
       setTimeout(() => navigate('/author-dashboard'), 2000);

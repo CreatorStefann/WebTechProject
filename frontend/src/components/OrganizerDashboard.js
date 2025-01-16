@@ -17,7 +17,7 @@ const OrganizerDashboard = () => {
           return;
         }
    
-        const response = await axios.get('http://localhost:3000/api/conferences', {
+        const response = await axios.get('https://final-project-webtech.azurewebsites.net:8080/api/conferences', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
