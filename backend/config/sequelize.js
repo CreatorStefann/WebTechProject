@@ -8,8 +8,11 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'mysql',
-    logging: false,
+    dialect: 'mssql', 
+    dialectOptions: {
+      encrypt: true, 
+    },
+    logging: false, 
   }
 );
 

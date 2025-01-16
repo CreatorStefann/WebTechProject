@@ -34,7 +34,7 @@ app.use('/api/authRoutes', authRoutes);
 
 (async () => {
   await connectDB();
-  await sequelize.sync({ alter: true });
+  await sequelize.sync({ alter: false });
 })();
 
 if (process.env.NODE_ENV === 'production') {
