@@ -10,7 +10,6 @@ const CreateConference = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleCreateConference = async (e) => {
     e.preventDefault();
@@ -29,7 +28,7 @@ const CreateConference = () => {
 
     try {
       
-      await axios.post(`${API_BASE_URL}/api/conferences`, {
+      await axios.post(`https://final-project-webtech.azurewebsites.net/api/conferences`, {
         title,
         startDate,
         endDate,

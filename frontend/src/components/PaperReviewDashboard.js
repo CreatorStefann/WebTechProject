@@ -8,13 +8,12 @@ const PaperReviewDashboard = () => {
   const [reviews, setReviews] = useState([]);
   const [paperDetails, setPaperDetails] = useState({});
   const [error, setError] = useState('');
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   //const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/papers/${paperId}`);
+        const response = await axios.get(`https://final-project-webtech.azurewebsites.net/api/papers/${paperId}`);
         setPaperDetails(response.data.paper);
 
         const completedReviews = response.data.paper.Reviews.filter(
@@ -28,7 +27,7 @@ const PaperReviewDashboard = () => {
     };
 
     fetchReviews();
-  }, [API_BASE_URL, paperId]);
+  }, [paperId]);
 
   const handleUpdatePaper = () => {
     const allConditionallyAccepted = paperDetails.status === 'conditionally accepted';

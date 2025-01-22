@@ -5,7 +5,6 @@ import Header from './Header.js';
 const SubmittedReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState('');
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchSubmittedReviews = async () => {
@@ -16,7 +15,7 @@ const SubmittedReviews = () => {
           return;
         }
 
-        const response = await axios.get(`${API_BASE_URL}/api/reviews/submitted/${reviewerId}`);
+        const response = await axios.get(`https://final-project-webtech.azurewebsites.net/api/reviews/submitted/${reviewerId}`);
         setReviews(response.data.reviews);
       } catch (err) {
         setError('Failed to fetch submitted reviews. Please try again.');
@@ -24,7 +23,7 @@ const SubmittedReviews = () => {
     };
 
     fetchSubmittedReviews();
-  }, [API_BASE_URL]);
+  });
 
   if (error) {
     return (

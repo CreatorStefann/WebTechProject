@@ -9,7 +9,6 @@ const ReviewerDashboard = () => {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchAssignedPapers = async () => {
@@ -22,7 +21,7 @@ const ReviewerDashboard = () => {
         }
 
         const response = await axios.get(
-          `${API_BASE_URL}/api/reviews/assigned-papers/${reviewerId}`
+          `https://final-project-webtech.azurewebsites.net/api/reviews/assigned-papers/${reviewerId}`
         );
 
         const pendingPapers = response.data.papers.filter(
@@ -43,7 +42,7 @@ const ReviewerDashboard = () => {
     };
 
     fetchAssignedPapers();
-  }, [API_BASE_URL]);
+  });
 
   
   const handleViewSubmittedReviews = () => {
@@ -65,7 +64,7 @@ const ReviewerDashboard = () => {
 
       console.log('Submitting review payload:', payload);
 
-      await axios.patch(`${API_BASE_URL}/api/reviews/${reviewerId}`, payload);
+      await axios.patch(`https://final-project-webtech.azurewebsites.net/api/reviews/${reviewerId}`, payload);
 
       setSuccess(`Review for paper ${paperId} submitted successfully!`);
 

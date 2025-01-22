@@ -11,7 +11,7 @@ const paperRoutes = require('./routes/papers');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/authRoutes');
-//require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 const app = express();
 
 const corsOptions = {
