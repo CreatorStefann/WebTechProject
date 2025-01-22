@@ -31,7 +31,6 @@ const PaperReviewDashboard = () => {
   }, [API_BASE_URL, paperId]);
 
   const handleUpdatePaper = () => {
-    // Check if all reviews are conditionally accepted
     const allConditionallyAccepted = paperDetails.status === 'conditionally accepted';
 
     if (!allConditionallyAccepted) {
@@ -39,7 +38,6 @@ const PaperReviewDashboard = () => {
       return;
     }
 
-    // Redirect to the UploadPaper page if eligible
     window.location.href = `/upload-paper/${paperDetails.conferenceId}`;
   };
 
@@ -58,7 +56,6 @@ const PaperReviewDashboard = () => {
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
             <div key={review.id} className="border p-3 mb-3 d-flex">
-              {/* Left Section */}
               <div className="w-50 pr-3">
                 <h5>
                   {index + 1}: Reviewer ID: {review.reviewerId}
@@ -73,7 +70,6 @@ const PaperReviewDashboard = () => {
                   <strong>Status:</strong> {review.status}
                 </p>
               </div>
-              {/* Right Section */}
               <div className="w-50 pl-3 border-left">
                 <p>
                   <strong>Feedback:</strong> {review.feedback || 'No feedback provided'}

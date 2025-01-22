@@ -89,20 +89,17 @@ const updateReview = async (req, res) => {
       return res.status(400).json({ error: 'You have already submitted a review for this paper.' });
     }
 
-    // Update the review
     existingReview.feedback = feedback;
     existingReview.rating = rating;
     existingReview.status = status;
     await existingReview.save();
 
-    // Check all reviews for this paper
     const allReviews = await Review.findAll({ where: { paperId } });
     const pendingReviews = allReviews.filter((r) => r.status === 'pending').length;
     const hasRejected = allReviews.some((r) => r.status === 'rejected');
     const hasConditionallyAccepted = allReviews.some((r) => r.status === 'conditionally accepted');
 
     if (pendingReviews === 0) {
-      // Update paper status based on reviews
       if (hasRejected) {
         paper.status = 'rejected';
       } else if (hasConditionallyAccepted) {
@@ -125,7 +122,6 @@ const updateReview = async (req, res) => {
   }
 };
 
-//adaugat get assigned papers
 const getAssignedPapers = async (req, res) => {
   try {
     const { reviewerId } = req.params;

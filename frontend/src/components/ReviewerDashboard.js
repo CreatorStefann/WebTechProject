@@ -21,12 +21,10 @@ const ReviewerDashboard = () => {
           return;
         }
 
-        // Fetch papers assigned to the reviewer
         const response = await axios.get(
           `${API_BASE_URL}/api/reviews/assigned-papers/${reviewerId}`
         );
 
-        // Filter out papers that are already reviewed (status not pending)
         const pendingPapers = response.data.papers.filter(
           (paper) =>
             paper.feedback === null &&
@@ -71,7 +69,6 @@ const ReviewerDashboard = () => {
 
       setSuccess(`Review for paper ${paperId} submitted successfully!`);
 
-      // Remove the reviewed paper from the list
       setAssignedPapers((prevPapers) =>
         prevPapers.filter((paper) => paper.paperId !== paperId)
       );
