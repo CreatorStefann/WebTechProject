@@ -46,7 +46,7 @@ const PaperList = () => {
     };
 
     fetchPapers();
-  }, [conferenceId]);
+  }, [API_BASE_URL,conferenceId]);
 
   if (loading) {
     return <div className="container mt-5">Loading papers...</div>;
