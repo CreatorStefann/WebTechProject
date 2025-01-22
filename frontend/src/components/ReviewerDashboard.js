@@ -42,7 +42,7 @@ const ReviewerDashboard = () => {
     };
 
     fetchAssignedPapers();
-  });
+  }, []);
 
   
   const handleViewSubmittedReviews = () => {

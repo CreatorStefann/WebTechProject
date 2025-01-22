@@ -20,7 +20,7 @@ const AuthorDashboard = () => {
     };
 
     fetchConferences();
-  })
+  }, [])
 
   const handleUploadPaper = (conferenceId) => {
     window.location.href = `/upload-paper/${conferenceId}`;

@@ -23,7 +23,7 @@ const SubmittedReviews = () => {
     };
 
     fetchSubmittedReviews();
-  });
+  }, []);
 
   if (error) {
     return (
