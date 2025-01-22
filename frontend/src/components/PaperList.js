@@ -9,18 +9,19 @@ const PaperList = () => {
   const [papers, setPapers] = useState([]); 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true); 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const response = await axios.get(`https://final-project-webtech.azurewebsites.net/api/papers?conferenceId=${conferenceId}`);
+        const response = await axios.get(`${API_BASE_URL}/api/papers?conferenceId=${conferenceId}`);
         const fetchedPapers = response.data.papers || [];
 
         const papersWithReviewers = await Promise.all(
           fetchedPapers.map(async (paper) => {
             try {
               const reviewersResponse = await axios.get(
-                `https://final-project-webtech.azurewebsites.net/api/papers/${paper.id}/reviewers`
+                `${API_BASE_URL}/api/papers/${paper.id}/reviewers`
               );
               return {
                 ...paper,

@@ -10,6 +10,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -22,7 +23,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post(`https://final-project-webtech.azurewebsites.net/api/authRoutes/register`, {
+      const response = await axios.post(`${API_BASE_URL}/api/authRoutes/register`, {
         username,
         password,
         role,

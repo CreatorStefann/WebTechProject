@@ -130,7 +130,7 @@ const updatePaper = async (req, res) => {
       return res.status(404).json({ error: 'Paper not found.' });
     }
 
-    if (paper.status !== 'rejected') {
+    if (paper.status !== 'conditionally accepted') {
       return res.status(400).json({ error: 'Paper cannot be updated at this stage.' });
     }
 

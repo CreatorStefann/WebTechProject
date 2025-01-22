@@ -12,6 +12,7 @@ const UploadPaper = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +39,7 @@ const UploadPaper = () => {
         authorId,
       };
   
-      await axios.post('https://final-project-webtech.azurewebsites.net/api/papers', payload);
+      await axios.post(`${API_BASE_URL}/api/papers`, payload);
   
       setSuccess('Paper uploaded successfully!');
       setTimeout(() => navigate('/author-dashboard'), 2000);

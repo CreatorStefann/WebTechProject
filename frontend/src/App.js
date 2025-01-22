@@ -9,6 +9,8 @@ import PaperList from './components/PaperList';
 import CreateConference from './components/CreateConference';
 import ReviewerDashboard from './components/ReviewerDashboard';
 import MainPage from './components/MainPage';
+import PaperReviewDashboard from './components/PaperReviewDashboard';
+import SubmittedReviews from './components/SubmittedReviews'
 import axios from 'axios';
 
 const App = () => {
@@ -28,6 +30,8 @@ const App = () => {
         <Route path="/organizer/create-conference" element={<CreateConference />} />
         <Route path="/reviewer-dashboard" element={<ReviewerDashboard/>}/>
         <Route path="/" element={<MainPage/>}/>
+        <Route path="/paper-review-dashboard/:paperId" element={<PaperReviewDashboard />} />
+        <Route path="/reviewer/submitted-reviews" element={<SubmittedReviews />} />
       </Routes>
     </Router>
   );

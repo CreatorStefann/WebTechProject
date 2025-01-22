@@ -3,6 +3,7 @@ const User = require('../models/user');
 const Conference = require('../models/conference');
 const Paper = require('../models/paper');
 const Review = require('../models/review');
+require('dotenv').config();
 
 const defineRelationships = () => {
   User.hasMany(Paper, { foreignKey: 'authorId', as: 'author' });

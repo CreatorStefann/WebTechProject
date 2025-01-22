@@ -15,7 +15,7 @@ const Review = sequelize.define('Review', {
     },
   },
   status: {
-    type: DataTypes.ENUM('accepted', 'rejected', 'pending'),
+    type: DataTypes.ENUM('accepted', 'rejected', 'pending', 'conditionally accepted'),
     allowNull: false,
   }
 });

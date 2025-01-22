@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from './Header.js';
+import { useNavigate } from 'react-router-dom';
 
 const AuthorDashboard = () => {
   const [conferences, setConferences] = useState([]);
   const [uploadedPapers, setUploadedPapers] = useState([]);
   const [showPapers, setShowPapers] = useState(false);
   const [error, setError] = useState('');
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchConferences = async () => {
       try {
-        const response = await axios.get('https://final-project-webtech.azurewebsites.net/api/conferences');
+        const response = await axios.get(`${API_BASE_URL}/api/conferences`);
         setConferences(response.data.conferences);
       } catch (err) {
         setError('Failed to fetch conferences. Please try again later.');
@@ -19,7 +21,7 @@ const AuthorDashboard = () => {
     };
 
     fetchConferences();
-  }, []);
+  }, [API_BASE_URL])
 
   const handleUploadPaper = (conferenceId) => {
     window.location.href = `/upload-paper/${conferenceId}`;
@@ -28,13 +30,17 @@ const AuthorDashboard = () => {
   const handleShowUploadedPapers = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const response = await axios.get(`https://final-project-webtech.azurewebsites.net/api/papers/author/${userId}`);
+      const response = await axios.get(`${API_BASE_URL}/api/papers/author/${userId}`);
 
       setUploadedPapers(response.data.papers);
       setShowPapers(true);
     } catch (err) {
       setError('Failed to fetch uploaded papers. Please try again.');
     }
+  };
+
+  const handleSeeReviews = (paperId) => {
+    navigate(`/paper-review-dashboard/${paperId}`);
   };
 
   return (
@@ -62,7 +68,7 @@ const AuthorDashboard = () => {
                   <th>Abstract</th>
                   <th>Conference</th>
                   <th>File</th>
-                  <th>Status</th>
+                  <th>Reviews</th>
                 </tr>
               </thead>
               <tbody>
@@ -80,7 +86,14 @@ const AuthorDashboard = () => {
                         View File
                       </a>
                     </td>
-                    <td>{paper.status}</td>
+                    <td>
+                      <button
+                          className="btn btn-primary"
+                          onClick={() => handleSeeReviews(paper.id)}
+                        >
+                          See Reviews
+                        </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

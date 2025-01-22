@@ -60,8 +60,8 @@ const updateReview = async (req, res) => {
   try {
     const { paperId, feedback, rating, status, reviewerId } = req.body;
 
-    if (!paperId || !status || !['accepted', 'rejected'].includes(status)) {
-      return res.status(400).json({ error: 'PaperId, status (accepted/rejected), and feedback are required.' });
+    if (!paperId || !status || !['accepted', 'rejected', 'conditionally accepted'].includes(status)) {
+      return res.status(400).json({ error: 'PaperId, status (accepted/rejected/conditionally accepted), and feedback are required.' });
     }
 
     if (rating && (rating < 1 || rating > 5)) {
@@ -89,29 +89,42 @@ const updateReview = async (req, res) => {
       return res.status(400).json({ error: 'You have already submitted a review for this paper.' });
     }
 
+    // Update the review
     existingReview.feedback = feedback;
     existingReview.rating = rating;
     existingReview.status = status;
     await existingReview.save();
 
+    // Check all reviews for this paper
     const allReviews = await Review.findAll({ where: { paperId } });
-    const pendingReviews = allReviews.filter((r) => r.status === 'pending');
+    const pendingReviews = allReviews.filter((r) => r.status === 'pending').length;
     const hasRejected = allReviews.some((r) => r.status === 'rejected');
+    const hasConditionallyAccepted = allReviews.some((r) => r.status === 'conditionally accepted');
 
-    if (pendingReviews.length === 0) {
-      paper.status = hasRejected ? 'rejected' : 'accepted';
+    if (pendingReviews === 0) {
+      // Update paper status based on reviews
+      if (hasRejected) {
+        paper.status = 'rejected';
+      } else if (hasConditionallyAccepted) {
+        paper.status = 'conditionally accepted';
+      } else {
+        paper.status = 'accepted';
+      }
+
       await paper.save();
     }
 
     res.status(200).json({
       message: 'Review updated successfully!',
       review: existingReview,
+      paperStatus: paper.status,
     });
   } catch (error) {
     console.error('Error updating review:', error);
     res.status(500).json({ error: 'An error occurred while updating the review.' });
   }
 };
+
 //adaugat get assigned papers
 const getAssignedPapers = async (req, res) => {
   try {
@@ -157,7 +170,30 @@ const getAssignedPapers = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching assigned papers.' });
   }
 };
+const getSubmittedReviews = async (req, res) => {
+  try {
+    const { reviewerId } = req.params;
 
+    const reviews = await Review.findAll({
+      where: { reviewerId },
+      include: [
+        {
+          model: Paper,
+          attributes: ['title', 'abstract', 'fileUrl'],
+        },
+      ],
+    });
+
+    if (!reviews.length) {
+      return res.status(404).json({ message: 'No submitted reviews found.' });
+    }
+
+    res.status(200).json({ reviews });
+  } catch (error) {
+    console.error('Error fetching submitted reviews:', error);
+    res.status(500).json({ error: 'Failed to fetch submitted reviews.' });
+  }
+};
 
 
 
@@ -166,4 +202,5 @@ module.exports = {
   submitReview,
   updateReview,
   getAssignedPapers,
+  getSubmittedReviews,
 };

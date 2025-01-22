@@ -11,13 +11,13 @@ const paperRoutes = require('./routes/papers');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/authRoutes');
-
+//require('dotenv').config({ path: '../.env' });
 const app = express();
 
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? 'https://final-project-webtech.azurewebsites.net' 
-    : 'http://localhost:8080',
+    : 'http://localhost:3000',
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };

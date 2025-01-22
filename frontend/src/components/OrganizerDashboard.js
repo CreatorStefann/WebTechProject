@@ -7,6 +7,7 @@ const OrganizerDashboard = () => {
   const [conferences, setConferences] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchConferences = async () => {
@@ -17,7 +18,7 @@ const OrganizerDashboard = () => {
           return;
         }
    
-        const response = await axios.get('https://final-project-webtech.azurewebsites.net/api/conferences', {
+        const response = await axios.get(`${API_BASE_URL}/api/conferences`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
